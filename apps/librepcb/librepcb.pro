@@ -42,7 +42,6 @@ LIBS += \
     -llibrepcbproject \
     -llibrepcblibrary \
     -llibrepcbcommon \
-    -lhoedown \
     -lmuparser \
     -lsexpresso \
 
@@ -55,7 +54,6 @@ INCLUDEPATH += \
     ../../libs/type_safe/external/debug_assert \
 
 DEPENDPATH += \
-    ../../libs/hoedown \
     ../../libs/librepcb/librarymanager \
     ../../libs/librepcb/projecteditor \
     ../../libs/librepcb/libraryeditor \
@@ -67,7 +65,6 @@ DEPENDPATH += \
     ../../libs/muparser \
 
 PRE_TARGETDEPS += \
-    $${DESTDIR}/libhoedown.a \
     $${DESTDIR}/libsexpresso.a \
     $${DESTDIR}/libmuparser.a \
 
@@ -99,7 +96,6 @@ SOURCES += \
     initializeworkspacewizard/initializeworkspacewizard_finalizeimport.cpp \
     initializeworkspacewizard/initializeworkspacewizardcontext.cpp \
     main.cpp \
-    markdown/markdownconverter.cpp \
     projectlibraryupdater/projectlibraryupdater.cpp \
 
 HEADERS += \
@@ -112,7 +108,6 @@ HEADERS += \
     initializeworkspacewizard/initializeworkspacewizard_choosesettings.h \
     initializeworkspacewizard/initializeworkspacewizard_finalizeimport.h \
     initializeworkspacewizard/initializeworkspacewizardcontext.h \
-    markdown/markdownconverter.h \
     projectlibraryupdater/projectlibraryupdater.h \
 
 FORMS += \
@@ -125,6 +120,15 @@ FORMS += \
     initializeworkspacewizard/initializeworkspacewizard_choosesettings.ui \
     initializeworkspacewizard/initializeworkspacewizard_finalizeimport.ui \
     projectlibraryupdater/projectlibraryupdater.ui \
+
+# Hoedown and markdownconverter are only needed for Qt <5.14
+equals(QT_MAJOR_VERSION, 5):lessThan(QT_MINOR_VERSION, 14) {
+    LIBS += -lhoedown
+    DEPENDPATH += ../../libs/hoedown
+    PRE_TARGETDEPS += $${DESTDIR}/libhoedown.a
+    SOURCES += markdown/markdownconverter.cpp
+    HEADERS += markdown/markdownconverter.h
+}
 
 # QuaZIP
 !contains(UNBUNDLE, quazip) {
