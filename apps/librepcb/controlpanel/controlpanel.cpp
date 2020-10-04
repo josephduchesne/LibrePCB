@@ -257,14 +257,16 @@ void ControlPanel::showProjectReadmeInBrowser(
   if (projectFilePath.isValid()) {
     FilePath readmeFilePath = projectFilePath.getPathTo("README.md");
 
-    // set search path to project directory, so that local files (e.g. images) can be embedded
+    // set search path to project directory, so that local files (e.g. images)
+    // can be embedded
     mUi->textBrowser->setSearchPaths(QStringList(projectFilePath.toStr()));
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 14, 0))
     // starting with Qt 5.14, the QTextDocument class natively supports Markdown
     QFile file(readmeFilePath.toStr());
     if (file.open(QFile::ReadOnly)) {
-      mUi->textBrowser->document()->setMarkdown(file.readAll(), QTextDocument::MarkdownDialectCommonMark);
+      mUi->textBrowser->document()->setMarkdown(
+          file.readAll(), QTextDocument::MarkdownDialectCommonMark);
     }
 #else
     // for older Qt versions, fall back to Hoedown
